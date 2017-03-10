@@ -1,0 +1,7 @@
+## Interface: 70100
+## Title: |cff88ff88CrossChat
+## Notes: |cff00ffffSPEAK TO THE OTHER FACTION !!!
+## SavedVariables: crossChatIgnoreList
+
+CrossChat.xml
+CrossChat.lua
