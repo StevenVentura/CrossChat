@@ -1,5 +1,5 @@
 # CrossChat
-World of Warcraft addon, "CrossChat", lets you send whispers to Horde (enemy) players. 
+World of Warcraft addon, "CrossChat", lets you send whispers to Horde (enemy) or Alliance players. 
 
 # USAGE:
 just target someone and type /cc
