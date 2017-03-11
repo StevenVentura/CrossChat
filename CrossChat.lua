@@ -2,7 +2,11 @@
 --Date Created: March 10, 2017
 --This addon lets you whisper the enemy faction using battle.net whispers. See https://github.com/StevenVentura/CrossChat for more info.
 
-
+--all my constants for message shortening
+CROSSCHAT_MESSAGE_INDICATOR = "÷;
+CROSSCHAT_SENDMESSAGETOTALKER = "a";
+CROSSCHAT_ASKINGFORHOST = "b";
+CROSSCHAT_RECEIVEMESSAGEFROMTALKER = "c";
 
 --local function taken from http://stackoverflow.com/questions/1426954/split-string-in-lua by user973713 on 11/26/15
 function CrossChatSplitString(inputstr, sep)
@@ -28,6 +32,20 @@ function CrossChatOnUpdate(self, elapsed)
 
 end--end function CrossChatOnUpdate
 
+
+local function onBattlenetMessageReceived(words)
+--return if its not an addon message
+if (~(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) return;
+
+--snip addonmessage header
+CROSSCHAT_ServerBNetMessageReceived(string.sub(message,1+strlen(CROSSCHAT_MESSAGE_INDICATOR)));
+
+
+
+
+
+
+end--end function
 
 
 
