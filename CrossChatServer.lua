@@ -46,10 +46,17 @@ SendChatMessage(dataToSend,"WHISPER",nil,whoToSendMessageTo);
 end--end function
 
 --all of the talkers are stored on the client
+<<<<<<< HEAD
 function CROSSCHAT_acceptNewClient(sender,data)
 player = {
 	presenceID = sender,
 	playerName = data;
+=======
+function CROSSCHAT_acceptNewClient(sender,name)
+player = {
+	presenceID = sender,
+	playerName = name;
+>>>>>>> origin/master
 	stackOfMessagesToSend = {},--stackOfMessagesToSend
 	talkerObjectArray = {}--talker array
 };
@@ -96,8 +103,11 @@ CROSSCHAT MESSAGING:
 format of message: xxDATA
 
 all messages here are addon messages
+<<<<<<< HEAD
 
 note that @param sender is presenceID
+=======
+>>>>>>> origin/master
 --]]
 function CROSSCHAT_ServerBNetMessageReceived(sender,message)
 typeOfMessage = string.sub(message,1,1);

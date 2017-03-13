@@ -7,9 +7,12 @@ CROSSCHAT_MESSAGE_INDICATOR = "÷;
 CROSSCHAT_SENDMESSAGETOTALKER = "a";
 CROSSCHAT_ASKINGFORHOST = "b";
 CROSSCHAT_RECEIVEMESSAGEFROMTALKER = "c";
+<<<<<<< HEAD
 
 SLASH_CROSSCHAT1 = "/crosschat"; SLASH_CROSSCHAT2 = "/cc"; SLASH_CROSSCHAT3 = "/cross";
 SlashCmdList["CROSSCHAT"] = slashCrossChat;
+=======
+>>>>>>> origin/master
 
 function slashCrossChat(msg,editbox)
 command, rest = msg:match("^(%S*)%s*(.-)$");
@@ -47,7 +50,24 @@ CROSSCHAT_ServerWhisperReceived(author,message);
 end--end function
 
 
+<<<<<<< HEAD
 function CROSSCHAT_scanFriendsList()
+=======
+local function onBattlenetMessageReceived(words)
+--return if its not an addon message
+if (~(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) return;
+
+--snip addonmessage header
+CROSSCHAT_ServerBNetMessageReceived(string.sub(message,1+strlen(CROSSCHAT_MESSAGE_INDICATOR)));
+
+
+
+
+
+
+end--end function
+
+>>>>>>> origin/master
 
 if BNConnected() then
 for index = 1, BNGetNumFriends() do
