@@ -5,3 +5,5 @@
 
 CrossChat.xml
 CrossChat.lua
+CrossChatClient.lua
+CrossChatServer.lua
