@@ -2,21 +2,20 @@
 --Date Created: March 10, 2017
 --This addon lets you whisper the enemy faction using battle.net whispers. See https://github.com/StevenVentura/CrossChat for more info.
 
+
 --all my constants for message shortening
-CROSSCHAT_MESSAGE_INDICATOR = "÷;
+CROSSCHAT_MESSAGE_INDICATOR = "÷";
 CROSSCHAT_SENDMESSAGETOTALKER = "a";
 CROSSCHAT_ASKINGFORHOST = "b";
 CROSSCHAT_RECEIVEMESSAGEFROMTALKER = "c";
-<<<<<<< HEAD
+CROSSCHAT_COLOR = "|cffff8800";--message color
 
 SLASH_CROSSCHAT1 = "/crosschat"; SLASH_CROSSCHAT2 = "/cc"; SLASH_CROSSCHAT3 = "/cross";
 SlashCmdList["CROSSCHAT"] = slashCrossChat;
-=======
->>>>>>> origin/master
 
 function slashCrossChat(msg,editbox)
 command, rest = msg:match("^(%S*)%s*(.-)$");
-
+CROSSCHAT_CLIENT_SLASHCROSSCHAT(command);
 
 end--end function
 --local function taken from http://stackoverflow.com/questions/1426954/split-string-in-lua by user973713 on 11/26/15
@@ -50,24 +49,7 @@ CROSSCHAT_ServerWhisperReceived(author,message);
 end--end function
 
 
-<<<<<<< HEAD
 function CROSSCHAT_scanFriendsList()
-=======
-local function onBattlenetMessageReceived(words)
---return if its not an addon message
-if (~(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) return;
-
---snip addonmessage header
-CROSSCHAT_ServerBNetMessageReceived(string.sub(message,1+strlen(CROSSCHAT_MESSAGE_INDICATOR)));
-
-
-
-
-
-
-end--end function
-
->>>>>>> origin/master
 
 if BNConnected() then
 for index = 1, BNGetNumFriends() do
@@ -81,14 +63,17 @@ end--end function
 --http://wowprogramming.com/docs/events/CHAT_MSG_BN_WHISPER
 function CrossChat:CHAT_MSG_BN_WHISPER(message,sender,u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,presenceID,u11)
 --return if its not an addon message
-if (~(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) return;
-if (sender == UnitName("player")) return;
+if (~(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) then return; end
+if (sender == GetUnitName("player")) then return; end
 print("message=&v presenceid" .. message)
 print(presenceID)
 --snip addonmessage header and plug into the server and client modules
 CROSSCHAT_ClientBNetMessageReceived(presenceID,string.sub(message,1+strlen(CROSSCHAT_MESSAGE_INDICATOR)));
 CROSSCHAT_ServerBNetMessageReceived(presenceID,string.sub(message,1+strlen(CROSSCHAT_MESSAGE_INDICATOR)));
 end--end function
+
+
+
 
 
 --this is called after the variables are loaded
@@ -101,4 +86,5 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",CROSSCHAT_onWhisperReceived);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM",CROSSCHAT_onWhisperSent);
 print("hello world xd")
 CROSSCHAT_scanFriendsList();
+CROSSCHAT_addCrosschatTab();
 end--end function CrossChatInit
