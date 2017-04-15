@@ -24,19 +24,18 @@ function CROSSCHAT_CLIENT_SLASHCROSSCHAT(command)
 enemyName = "";
 --get the name of who he is trying to slash talk to
 --check if hes targeting someone
-targetName = "";
-targetName = GetUnitName("target",true);
-if (targetName == GetUnitName("player")) then
-	targetName = "";
-	end
-if (targetName == nil and (command == "" or command == nil)) then
+targetName = GetUnitName("target",false);
+
+if ((GetUnitName("target") == nil or GetUnitName("target") == GetUnitName("player"))
+			and (command == nil or command == "")) then
 print(CROSSCHAT_COLOR .. "<CrossChat>You need to specify a target");
-end--end if
-if (targetName ~= "" and targetName ~= nil) then
-	enemyName=targetName;
+else if (command == nil or command == "") then
+	realm = GetRealmName("target");
+	enemyName=targetName .. "-" .. realm;
 	else 
 	enemyName = command;
 	end
+end--end if
 --enemyName has now been resolved and can be used.
 
 if (enemyName ~= "") then
