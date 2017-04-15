@@ -37,7 +37,7 @@ whoToSendMessageTo = string.sub(message,1,indexOfSpace-1);
 dataToSend = string.sub(message,indexOfSpace+1);
 
 --put the new header on the message so he knows who he is hearing from
-dataToSend = "<cc>[" .. players[presenceID].playerName .. "]: " .. dataToSend;
+dataToSend = "<CrossChat>[" .. players[presenceID].playerName .. "]: " .. dataToSend;
 
 --add this person to list of people who can reply to your client player
 players[presenceID].talkerObjectArray[whoToSendMessageTo] = whoToSendMessageTo;
@@ -107,6 +107,14 @@ if (typeOfMessage == CROSSCHAT_SENDMESSAGETOTALKER)
 then
 queueNewMessageFromClient(sender,string.sub(message,1+1));
 end--end if
+
+if (typeOfMessage == CROSSCHAT_ADDINGNEWENEMY)
+then
+--add the talker
+players[sender].talkerObjectArray[string.sub(message,1+1)] = string.sub(message,1+1);
+--TODO remove this... send him a whisper lmao
+queueNewMessageFromClient(sender,players[sender].talkerObjectArray[string.sub(message,1+1)] .. " test message lol");
+end
 
 --[[
 DOCUMENTATION

@@ -13,6 +13,7 @@ CROSSCHAT_MESSAGE_INDICATOR = "÷";
 CROSSCHAT_SENDMESSAGETOTALKER = "a";
 CROSSCHAT_ASKINGFORHOST = "b";
 CROSSCHAT_RECEIVEMESSAGEFROMTALKER = "c";
+CROSSCHAT_ADDINGNEWENEMY = "d";
 CROSSCHAT_COLOR = "|cffff8800";--message color
 
 SLASH_CROSSCHAT1 = "/crosschat"; SLASH_CROSSCHAT2 = "/cc"; SLASH_CROSSCHAT3 = "/cross";
@@ -73,8 +74,6 @@ function CROSSCHAT_CHAT_MSG_BN_WHISPER(tableThing,uselessCHAT_MSG_BN_WHISPER
 --return if its not an addon message
 if (not(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) then return; end
 if (sender == GetUnitName("player")) then return; end
-print("message=&v presenceid" .. message)
-print(presenceID)
 --snip addonmessage header and plug into the server and client modules
 CROSSCHAT_ClientBNetMessageReceived(presenceID,string.sub(message,1+strlen(CROSSCHAT_MESSAGE_INDICATOR)));
 CROSSCHAT_ServerBNetMessageReceived(presenceID,string.sub(message,1+strlen(CROSSCHAT_MESSAGE_INDICATOR)));
@@ -90,7 +89,6 @@ function CrossChatInit()
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",CROSSCHAT_onWhisperReceived);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM",CROSSCHAT_onWhisperSent);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",CROSSCHAT_CHAT_MSG_BN_WHISPER);
-print("hello world xd")
 CROSSCHAT_scanFriendsList();
 --TODO
 --CROSSCHAT_addCrosschatTab();

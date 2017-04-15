@@ -42,6 +42,7 @@ if (targetName ~= "" and targetName ~= nil) then
 if (enemyName ~= "") then
 --TODO: check if player exists
 CROSSCHAT_findServerHostForEnemy(enemyName);
+BNSendWhisper(players[enemyName].hostID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_ADDINGNEWENEMY .. enemyName);
 print(CROSSCHAT_COLOR .. enemyName .. " is being now hosted by " .. players[enemyName].hostID);
 end
 end--end function
@@ -96,8 +97,10 @@ if (bnetNameWithNumber == "StevenOldAcc#1866") then
 	hostID = presenceID
 	};
 --send the acknowledge to the server
-name,realm = GetUnitName("player");
-BNSendWhisper(presenceID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_ASKINGFORHOST .. name);
+name = GetUnitName("player",false);
+realm = GetRealmName("player");
+combo = name .. "-" .. realm;
+BNSendWhisper(presenceID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_ASKINGFORHOST .. combo);
 end--end if
 --TODO poll for other hosts
 end--end for
