@@ -1,7 +1,12 @@
 --Author: Nøøblet-Gorefiend (Steven Ventura)
 --Date Created: March 10, 2017
 --This addon lets you whisper the enemy faction using battle.net whispers. See https://github.com/StevenVentura/CrossChat for more info.
+CrossChat = CreateFrame("Frame");
 
+--CrossChat:SetScript("OnEvent",function(self,event,...) self[event](self,event,...);end)
+CrossChat:SetScript("OnUpdate", function(self, elapsed) CrossChatOnUpdate(self, elapsed) end)
+CrossChat:RegisterEvent("VARIABLES_LOADED");
+CrossChat:RegisterEvent("CHAT_MSG_BN_WHISPER");
 
 --all my constants for message shortening
 CROSSCHAT_MESSAGE_INDICATOR = "÷";
@@ -53,7 +58,9 @@ function CROSSCHAT_scanFriendsList()
 
 if BNConnected() then
 for index = 1, BNGetNumFriends() do
-local bnetIDAccount,accountName,_,_,characterName,_,game = BNGetFriendInfo( index );
+--http://wowprogramming.com/docs/api/BNGetFriendInfo
+local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
+
 end--end for
 end--end if BNConnected
 
@@ -61,9 +68,10 @@ end--end if BNConnected
 end--end function
 
 --http://wowprogramming.com/docs/events/CHAT_MSG_BN_WHISPER
-function CrossChat:CHAT_MSG_BN_WHISPER(message,sender,u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,presenceID,u11)
+function CROSSCHAT_CHAT_MSG_BN_WHISPER(tableThing,uselessCHAT_MSG_BN_WHISPER
+						,message,sender,u3,u4,u5,u6,u7,u8,u9,u10,presenceLie,u11,presenceID,u13)
 --return if its not an addon message
-if (~(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) then return; end
+if (not(string.sub(message,1,strlen(CROSSCHAT_MESSAGE_INDICATOR)) == CROSSCHAT_MESSAGE_INDICATOR)) then return; end
 if (sender == GetUnitName("player")) then return; end
 print("message=&v presenceid" .. message)
 print(presenceID)
@@ -78,13 +86,12 @@ end--end function
 
 --this is called after the variables are loaded
 function CrossChatInit()
-CrossChat:SetScript("OnUpdate", function(self, elapsed) CrossChatOnUpdate(self, elapsed) end)
-CrossChat:SetScript("OnEvent",function(self,event,...) self[event](self,event,...);end)
-CrossChat:RegisterEvent("VARIABLES_LOADED");
-CrossChat:RegisterEvent("CHAT_MSG_BN_WHISPER");
+
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",CROSSCHAT_onWhisperReceived);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM",CROSSCHAT_onWhisperSent);
+ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",CROSSCHAT_CHAT_MSG_BN_WHISPER);
 print("hello world xd")
 CROSSCHAT_scanFriendsList();
-CROSSCHAT_addCrosschatTab();
+--TODO
+--CROSSCHAT_addCrosschatTab();
 end--end function CrossChatInit

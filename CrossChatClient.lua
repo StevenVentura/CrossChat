@@ -29,19 +29,21 @@ targetName = GetUnitName("target",true);
 if (targetName == GetUnitName("player")) then
 	targetName = "";
 	end
-if (targetName == "" and command == "") then
+if (targetName == nil and (command == "" or command == nil)) then
 print(CROSSCHAT_COLOR .. "<CrossChat>You need to specify a target");
 end--end if
-if (targetName ~= "") then
+if (targetName ~= "" and targetName ~= nil) then
 	enemyName=targetName;
 	else 
 	enemyName = command;
 	end
 --enemyName has now been resolved and can be used.
 
-findServerHostForEnemy(enemyName);
-print(enemyName .. " is being now hosted by " .. players[enemyName].hostID);
-
+if (enemyName ~= "") then
+--TODO: check if player exists
+CROSSCHAT_findServerHostForEnemy(enemyName);
+print(CROSSCHAT_COLOR .. enemyName .. " is being now hosted by " .. players[enemyName].hostID);
+end
 end--end function
 
 --[[
@@ -77,6 +79,7 @@ local tab = 1
   
 
 end--end function
+--it is called like this because i am going to open a new tab
 function CROSSCHAT_findServerHostForEnemy(enemyName)
 --[[
 has to find a host for this guy
@@ -85,18 +88,18 @@ and then add him to our array
 
 --find sahib for now; dedicated host
 for index = 1, BNGetNumFriends() do
-local bnetIDAccount,accountName,_,_,characterName,_,game = BNGetFriendInfo( index );
-print("accountName=" .. accountName);
-if (accountName == "StevenOldAcc#1866") then
+--http://wowprogramming.com/docs/api/BNGetFriendInfo
+local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
+if (bnetNameWithNumber == "StevenOldAcc#1866") then
 	players[enemyName] = {
 	playerName = enemyName,
-	hostID = bnetIDAccount
+	hostID = presenceID
 	};
 --send the acknowledge to the server
 name,realm = GetUnitName("player");
-combo = name .. "-" .. realm;
-BNSendWhisper(CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_ASKINGFORHOST .. combo);
+BNSendWhisper(presenceID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_ASKINGFORHOST .. name);
 end--end if
+--TODO poll for other hosts
 end--end for
 
 end--end function

@@ -46,7 +46,7 @@ SendChatMessage(dataToSend,"WHISPER",nil,whoToSendMessageTo);
 end--end function
 
 --all of the talkers are stored on the client
-function CROSSCHAT_acceptNewClient(sender,data)
+function CROSSCHAT_acceptNewClient(sender,data)--sender is a presenceID
 player = {
 	presenceID = sender,
 	playerName = data,
@@ -67,10 +67,10 @@ note "player" is a presenceID
 function CROSSCHAT_sendBNetMessageFromTalkerToClient(talker,player,message)
 --make that header
 messageOut = CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_RECEIVEMESSAGEFROMTALKER .. talker .. " " .. message;
-BNSendWhisper(player,messageText);
+BNSendWhisper(player.presenceID,messageText);
 end--end function
 
-function CROSSCHAT_ServerWhisperReceived(sender,message)
+function CROSSCHAT_ServerWhisperReceived(sender,message)--sender is a presenceID
 --check if this is one of our clients''' talkers''. if so, send the message
 for player in players do
 for talker in player.talkerObjectArray do
@@ -98,7 +98,7 @@ all messages here are addon messages
 
 note that @param sender is presenceID
 --]]
-function CROSSCHAT_ServerBNetMessageReceived(sender,message)
+function CROSSCHAT_ServerBNetMessageReceived(sender,message)--sender is a presenceID
 typeOfMessage = string.sub(message,1,1);
 
 
