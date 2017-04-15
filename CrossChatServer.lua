@@ -40,6 +40,7 @@ dataToSend = string.sub(message,indexOfSpace+1);
 dataToSend = "<CrossChat>[" .. players[presenceID].playerName .. "]: " .. dataToSend;
 
 --add this person to list of people who can reply to your client player
+print("whoToSendMessageTo is " .. whoToSendMessageTo)
 players[presenceID].talkerObjectArray[whoToSendMessageTo] = whoToSendMessageTo;
 --just go ahead and send the message
 SendChatMessage(dataToSend,"WHISPER",nil,whoToSendMessageTo);
@@ -64,19 +65,21 @@ format:
 message inidicator, sender name, data
 note "player" is a presenceID
 ]]
-function CROSSCHAT_sendBNetMessageFromTalkerToClient(talker,player,message)
+function CROSSCHAT_sendBNetMessageFromTalkerToClient(talker,presenceID,message)
 --make that header
 messageOut = CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_RECEIVEMESSAGEFROMTALKER .. talker .. " " .. message;
-BNSendWhisper(player.presenceID,messageText);
+BNSendWhisper(presenceID,messageOut);
 end--end function
 
-function CROSSCHAT_ServerWhisperReceived(sender,message)--sender is a presenceID
+function CROSSCHAT_ServerWhisperReceived(sender,message)--sender is a normal whisper name
+print(sender);
 --check if this is one of our clients''' talkers''. if so, send the message
-for player in players do
-for talker in player.talkerObjectArray do
-if (talker == sender)
+for i, _ in pairs(players) do
+for t, talker in pairs(player.talkerObjectArray) do
+--note: talker is lowercase and messed up lol. Sender is Whispernick-Hakkar. talker is whispernick-hakkar
+if (strlower(talker) == strlower(sender))
 	then
-	CROSSCHAT_sendBNetMessageFromTalkerToClient(talker,player,message);
+	CROSSCHAT_sendBNetMessageFromTalkerToClient(sender,i,message);
 	return
 	end
 end--end for
@@ -108,13 +111,13 @@ then
 queueNewMessageFromClient(sender,string.sub(message,1+1));
 end--end if
 
-if (typeOfMessage == CROSSCHAT_ADDINGNEWENEMY)
+--[[if (typeOfMessage == CROSSCHAT_ADDINGNEWENEMY)
 then
 --add the talker
 players[sender].talkerObjectArray[string.sub(message,1+1)] = string.sub(message,1+1);
 --TODO remove this... send him a whisper lmao
-queueNewMessageFromClient(sender,players[sender].talkerObjectArray[string.sub(message,1+1)] .. " test message lol");
-end
+queueNewMessageFromClient(sender,players[sender].talkerObjectArray[string.sub(message,1+1)] .. " plswork");
+end--]]
 
 --[[
 DOCUMENTATION

@@ -33,7 +33,12 @@ else if (command == nil or command == "") then
 	realm = GetRealmName("target");
 	enemyName=targetName .. "-" .. realm;
 	else 
+	--check if they included the server name. if not, assume it is the player's server.
+	if (string.find(command,"-") == nil) then
+	enemyName = command .. "-" .. GetRealmName("player");
+	else
 	enemyName = command;
+	end--end if no -
 	end
 end--end if
 --enemyName has now been resolved and can be used.
@@ -41,7 +46,8 @@ end--end if
 if (enemyName ~= "") then
 --TODO: check if player exists
 CROSSCHAT_findServerHostForEnemy(enemyName);
-BNSendWhisper(players[enemyName].hostID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_ADDINGNEWENEMY .. enemyName);
+BNSendWhisper(players[enemyName].hostID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_SENDMESSAGETOTALKER .. enemyName
+					.. " heyo guys");
 print(CROSSCHAT_COLOR .. enemyName .. " is being now hosted by " .. players[enemyName].hostID);
 end
 end--end function
