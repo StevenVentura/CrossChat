@@ -17,7 +17,8 @@ playerObject
 	hostID
 ]]
 local players = {};
-
+--used for clicking on their name and sending them a message
+currentEnemyTalkingTo="";
 
 
 function CROSSCHAT_CLIENT_SLASHCROSSCHAT(command)
@@ -65,7 +66,6 @@ Crosschat uses its own tab for whispers. the TAB key is overwritten to cycle thr
 	You can click on the name of the enemy player if you want to talk to them instead.
 ]]
 
-currentEnemyTalkingTo="";
 --function to be called only once at addon startup
 function CROSSCHAT_addCrosschatTab()
 --http://wowwiki.wikia.com/wiki/Creating_tabbed_windows
@@ -83,12 +83,14 @@ local tab = 1
 --  _G["ChatFrame"..tab]:AddMessage(...)
 --PanelTemplates_SetTab(myTabContainerFrame, 2);
 
-  
-  
-  
-  
-
 end--end function
+
+function CrossChatLinkClicked(...)
+print("dotdotdot is ");
+print(...);
+
+
+end--end function CrossChatLinkClicked
 --it is called like this because i am going to open a new tab
 function CROSSCHAT_findServerHostForEnemy(enemyName)
 --[[
@@ -118,7 +120,9 @@ end--end function
 
 --things other talkers say back to me
 function CROSSCHAT_postReceivedMessageInTab(author,message)
-ChatFrame3:AddMessage(CROSSCHAT_GREENONE .. "[" .. author .. "] says: " .. message);
+authorLink = "\124Hplayer:" .. author .. "\124h" .. author .. "\124h";
+
+ChatFrame3:AddMessage(CROSSCHAT_GREENONE .. "[" .. authorLink .. "] says: " .. message);
 end--end function
 --things i say
 function CROSSCHAT_postMyOwnMessageInTab(message)

@@ -105,6 +105,7 @@ end
 end--end function CrossChatOutgoing
 
 
+
 --this is called after the variables are loaded
 function CrossChatInit()
 
@@ -112,6 +113,7 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",CROSSCHAT_onWhisperReceived);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM",CROSSCHAT_onWhisperSent);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",CROSSCHAT_CHAT_MSG_BN_WHISPER);
 ChatFrame3:Show();--my frame lol
+--ChatFrame3:SetScript("OnHyperlinkClick",CrossChatLinkClicked)--function(...) print("A hyperlink was clicked: ", ...) end)
 hooksecurefunc('ChatEdit_ParseText',CrossChatOutgoing);
 
 CROSSCHAT_scanFriendsList();
