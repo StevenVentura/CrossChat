@@ -85,7 +85,12 @@ function CrossChatOutgoing(chatEntry, send)
 
 if (send == 1 and chatEntry:GetName()=="ChatFrame3EditBox")
 then
-if (string.sub(chatEntry:GetText(),1,1) == "/") then
+print("gettetxt,1,1 is ")
+print(string.sub(chatEntry:GetText(),1,1));
+print(chatEntry:GetText());
+if (string.sub(chatEntry:GetText(),1,1) == "/"
+	or chatEntry:GetText() == nil
+	or chatEntry:GetText() == "") then
 --do nothing for now i guess
 else
 CROSSCHAT_postMyOwnMessageInTab(chatEntry:GetText());

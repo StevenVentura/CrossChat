@@ -100,7 +100,7 @@ and then add him to our array
 for index = 1, BNGetNumFriends() do
 --http://wowprogramming.com/docs/api/BNGetFriendInfo
 local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
-if (bnetNameWithNumber == "StevenOldAcc#1866") then
+if (bnetNameWithNumber == "Jenn#1884") then--"StevenOldAcc#1866") then
 	players[enemyName] = {
 	playerName = enemyName,
 	hostID = presenceID
@@ -118,7 +118,7 @@ end--end function
 
 --things other talkers say back to me
 function CROSSCHAT_postReceivedMessageInTab(author,message)
-ChatFrame3:AddMessage(CROSSCHAT_GREENONE .. "[" .. author .. "] say: " .. message);
+ChatFrame3:AddMessage(CROSSCHAT_GREENONE .. "[" .. author .. "] says: " .. message);
 end--end function
 --things i say
 function CROSSCHAT_postMyOwnMessageInTab(message)
@@ -143,7 +143,18 @@ data = string.sub(message,1+1);
 split = CrossChatSplitString(data);
 if (messageType == CROSSCHAT_RECEIVEMESSAGEFROMTALKER) then
 --data section: talker + " " + message
-CROSSCHAT_postReceivedMessageInTab(split[1],split[2]);
+print("data is:")
+print(data)
+
+indexOfSpace = string.find(data," ");
+print("indexofSpace is " .. indexOfSpace)
+whoToSendMessageTo = string.sub(data,1,indexOfSpace-1);
+dataToSend = string.sub(data,indexOfSpace+1);
+
+
+CROSSCHAT_postReceivedMessageInTab(whoToSendMessageTo,
+								   dataToSend
+								  );
 
 end--end if
 

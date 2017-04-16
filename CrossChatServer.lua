@@ -30,7 +30,7 @@ local players = {};
 --[[first two bytes have been trimmed. send the message and store the data of who it was sent to.
 note that "clientName" parameter is a battlenet presenceID
 ]]
-local function queueNewMessageFromClient(presenceID,message)
+function CROSSCHAT_queueNewMessageFromClient(presenceID,message)
 --parse out the message
 print("message is")
 print(message)
@@ -114,7 +114,7 @@ typeOfMessage = string.sub(message,1,1);
 --it is words to send from client to talker
 if (typeOfMessage == CROSSCHAT_SENDMESSAGETOTALKER)
 then
-queueNewMessageFromClient(sender,string.sub(message,1+1));
+CROSSCHAT_queueNewMessageFromClient(sender,string.sub(message,1+1));
 end--end if
 
 --[[if (typeOfMessage == CROSSCHAT_ADDINGNEWENEMY)
