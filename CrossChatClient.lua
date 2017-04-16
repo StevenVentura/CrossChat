@@ -43,13 +43,17 @@ else if (command == nil or command == "") then
 end--end if
 --enemyName has now been resolved and can be used.
 
-if (enemyName ~= "") then
+if (enemyName ~= "" and enemyName ~= nil) then
 --TODO: check if player exists
 CROSSCHAT_findServerHostForEnemy(enemyName);
+if (players[enemyName] == nil) then
+print(CROSSCHAT_COLOR .. "<CrossChat> Unable to find a host for " .. enemyName .. ". Get some of your battlenet opposite-faction friends to download the addon." .. CROSSCHAT_GREENONE .. "(www.curse.com/addons/wow/CrossChat) ." .. CROSSCHAT_COLOR .. " Or they can use the curse client.");
+else
 BNSendWhisper(players[enemyName].hostID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_SENDMESSAGETOTALKER .. enemyName
 					.. " heyo guys");
 print(CROSSCHAT_COLOR .. enemyName .. " is being now hosted by " .. players[enemyName].hostID);
-end
+end--end if found a host
+end--end if enemyname is "valid" entry (still havent checked if the player actually exists TODO)
 end--end function
 
 --[[
@@ -114,14 +118,22 @@ end--end function
 
 --things other talkers say back to me
 function CROSSCHAT_postReceivedMessageInTab(author,message)
-
-
-
+ChatFrame3:AddMessage(CROSSCHAT_GREENONE .. "[" .. author .. "] say: " .. message);
 end--end function
 --things i say
 function CROSSCHAT_postMyOwnMessageInTab(message)
+ChatFrame3:AddMessage(CROSSCHAT_COLOR .. "<You>: " .. message);
+--TODO
+--send it to all the players for now i guess
+--cos i dont have a way to select players yet
+for i, _ in pairs(players) do
 
-
+--for t, talker in pairs(players[i].talkerObjectArray) do
+BNSendWhisper(players[i].hostID,CROSSCHAT_MESSAGE_INDICATOR
+					.. CROSSCHAT_SENDMESSAGETOTALKER .. players[i].playerName
+					.. " " .. message);
+--end--end for
+end--end for
 end--end function
 
 --the first byte of the message has been truncated (its an addon message)

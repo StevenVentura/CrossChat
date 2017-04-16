@@ -32,15 +32,21 @@ note that "clientName" parameter is a battlenet presenceID
 ]]
 local function queueNewMessageFromClient(presenceID,message)
 --parse out the message
+print("message is")
+print(message)
+
 indexOfSpace = string.find(message," ");
 whoToSendMessageTo = string.sub(message,1,indexOfSpace-1);
 dataToSend = string.sub(message,indexOfSpace+1);
-
+print("presenceID is " )
+print(presenceID)
+print("whoToSendMessageTo is " .. whoToSendMessageTo)
+print("dataToSend is ")
+print(dataToSend)
 --put the new header on the message so he knows who he is hearing from
 dataToSend = "<CrossChat>[" .. players[presenceID].playerName .. "]: " .. dataToSend;
 
 --add this person to list of people who can reply to your client player
-print("whoToSendMessageTo is " .. whoToSendMessageTo)
 players[presenceID].talkerObjectArray[whoToSendMessageTo] = whoToSendMessageTo;
 --just go ahead and send the message
 SendChatMessage(dataToSend,"WHISPER",nil,whoToSendMessageTo);
@@ -75,7 +81,7 @@ function CROSSCHAT_ServerWhisperReceived(sender,message)--sender is a normal whi
 print(sender);
 --check if this is one of our clients''' talkers''. if so, send the message
 for i, _ in pairs(players) do
-for t, talker in pairs(player.talkerObjectArray) do
+for t, talker in pairs(players[i].talkerObjectArray) do
 --note: talker is lowercase and messed up lol. Sender is Whispernick-Hakkar. talker is whispernick-hakkar
 if (strlower(talker) == strlower(sender))
 	then

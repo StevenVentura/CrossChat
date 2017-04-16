@@ -15,6 +15,7 @@ CROSSCHAT_ASKINGFORHOST = "b";
 CROSSCHAT_RECEIVEMESSAGEFROMTALKER = "c";
 CROSSCHAT_ADDINGNEWENEMY = "d";
 CROSSCHAT_COLOR = "|cffff8800";--message color
+CROSSCHAT_GREENONE = "|cff22dd22";
 
 SLASH_CROSSCHAT1 = "/crosschat"; SLASH_CROSSCHAT2 = "/cc"; SLASH_CROSSCHAT3 = "/cross";
 SlashCmdList["CROSSCHAT"] = slashCrossChat;
@@ -80,7 +81,23 @@ CROSSCHAT_ServerBNetMessageReceived(presenceID,string.sub(message,1+strlen(CROSS
 end--end function
 
 
+function CrossChatOutgoing(chatEntry, send)
 
+if (send == 1 and chatEntry:GetName()=="ChatFrame3EditBox")
+then
+if (string.sub(chatEntry:GetText(),1,1) == "/") then
+--do nothing for now i guess
+else
+CROSSCHAT_postMyOwnMessageInTab(chatEntry:GetText());
+chatEntry:SetText("");--absorb the message
+--also send it back
+end
+
+
+end
+
+
+end--end function CrossChatOutgoing
 
 
 --this is called after the variables are loaded
@@ -89,6 +106,9 @@ function CrossChatInit()
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",CROSSCHAT_onWhisperReceived);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM",CROSSCHAT_onWhisperSent);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",CROSSCHAT_CHAT_MSG_BN_WHISPER);
+ChatFrame3:Show();--my frame lol
+hooksecurefunc('ChatEdit_ParseText',CrossChatOutgoing);
+
 CROSSCHAT_scanFriendsList();
 --TODO
 --CROSSCHAT_addCrosschatTab();
