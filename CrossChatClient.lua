@@ -17,11 +17,16 @@ playerObject
 	hostID
 ]]
 local players = {};
---used for clicking on their name and sending them a message
-currentEnemyTalkingTo="";
+--used for pressing enter and sending them a message
+CROSSCHAT_currentEnemyWhispering = "";
 
 
 function CROSSCHAT_CLIENT_SLASHCROSSCHAT(command)
+if (strlower(command) == "help") then
+ChatFrame3:AddMessage(CROSSCHAT_COLOR .. "HELP LISTING options: either...\n    1) Target someone and type /cc.\nor 2) Type /cc and then someones name. Include the dash-server name. \n         |cffff0000example: |cffffee00/cc swifty-ragnaros");
+return;
+end
+
 enemyName = "";
 --get the name of who he is trying to slash talk to
 --check if hes targeting someone
@@ -47,13 +52,7 @@ end--end if
 if (enemyName ~= "" and enemyName ~= nil) then
 --TODO: check if player exists
 CROSSCHAT_findServerHostForEnemy(enemyName);
-if (players[enemyName] == nil) then
-print(CROSSCHAT_COLOR .. "<CrossChat> Unable to find a host for " .. enemyName .. ". Get some of your battlenet opposite-faction friends to download the addon." .. CROSSCHAT_GREENONE .. "(www.curse.com/addons/wow/CrossChat) ." .. CROSSCHAT_COLOR .. " Or they can use the curse client.");
-else
-BNSendWhisper(players[enemyName].hostID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_SENDMESSAGETOTALKER .. enemyName
-					.. " heyo guys");
-print(CROSSCHAT_COLOR .. enemyName .. " is being now hosted by " .. players[enemyName].hostID);
-end--end if found a host
+
 end--end if enemyname is "valid" entry (still havent checked if the player actually exists TODO)
 end--end function
 
@@ -85,12 +84,7 @@ local tab = 1
 
 end--end function
 
-function CrossChatLinkClicked(...)
-print("dotdotdot is ");
-print(...);
 
-
-end--end function CrossChatLinkClicked
 --it is called like this because i am going to open a new tab
 function CROSSCHAT_findServerHostForEnemy(enemyName)
 --[[
@@ -98,7 +92,9 @@ has to find a host for this guy
 and then add him to our array
 ]]
 
---find sahib for now; dedicated host
+--if he is (not) already on the list
+if (players[enemyName] == nil) then
+--TODO find real host; find sahib for now; dedicated host
 for index = 1, BNGetNumFriends() do
 --http://wowprogramming.com/docs/api/BNGetFriendInfo
 local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
@@ -115,8 +111,30 @@ BNSendWhisper(presenceID,CROSSCHAT_MESSAGE_INDICATOR .. CROSSCHAT_ASKINGFORHOST 
 end--end if
 --TODO poll for other hosts
 end--end for
+end--end players[enemyName] is nil
+
+--status report
+if (players[enemyName] == nil) then
+print(CROSSCHAT_COLOR .. "<CrossChat> Unable to find a host for " .. enemyName .. ". Get some of your battlenet opposite-faction friends to download the addon." .. CROSSCHAT_GREENONE .. "(www.curse.com/addons/wow/CrossChat) ." .. CROSSCHAT_COLOR .. " Or they can use the curse client.");
+else
+--print his clickable link
+guyLink = "\124Hplayer:" .. enemyName .. "\124h" .. enemyName .. "\124h";
+ChatFrame3:AddMessage(CROSSCHAT_GREENONE .. "click me: [" .. guyLink .. "]");
+CROSSCHAT_setCurrentGuy(enemyName);
+print(CROSSCHAT_COLOR .. enemyName .. " is being now hosted by " .. players[enemyName].hostID);
+end--end if found a host
 
 end--end function
+
+--for the purple whisper text
+function CROSSCHAT_setCurrentGuy(guy)
+CROSSCHAT_currentEnemyWhispering = guy;
+end--end function setCurrentGuy
+
+function CROSSCHAT_getCurrentGuy()
+if (CROSSCHAT_currentEnemyWhispering == nil) then return "" end
+return CROSSCHAT_currentEnemyWhispering;
+end--end function getCurrentGuy
 
 --things other talkers say back to me
 function CROSSCHAT_postReceivedMessageInTab(author,message)
@@ -130,14 +148,14 @@ ChatFrame3:AddMessage(CROSSCHAT_COLOR .. "<You>: " .. message);
 --TODO
 --send it to all the players for now i guess
 --cos i dont have a way to select players yet
-for i, _ in pairs(players) do
+--for i, _ in pairs(players) do
 
 --for t, talker in pairs(players[i].talkerObjectArray) do
-BNSendWhisper(players[i].hostID,CROSSCHAT_MESSAGE_INDICATOR
-					.. CROSSCHAT_SENDMESSAGETOTALKER .. players[i].playerName
+BNSendWhisper(players[CROSSCHAT_getCurrentGuy()].hostID,CROSSCHAT_MESSAGE_INDICATOR
+					.. CROSSCHAT_SENDMESSAGETOTALKER .. players[CROSSCHAT_getCurrentGuy()].playerName
 					.. " " .. message);
 --end--end for
-end--end for
+--end--end for
 end--end function
 
 --the first byte of the message has been truncated (its an addon message)

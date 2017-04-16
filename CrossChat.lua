@@ -23,7 +23,6 @@ SlashCmdList["CROSSCHAT"] = slashCrossChat;
 function slashCrossChat(msg,editbox)
 command, rest = msg:match("^(%S*)%s*(.-)$");
 CROSSCHAT_CLIENT_SLASHCROSSCHAT(command);
-
 end--end function
 --local function taken from http://stackoverflow.com/questions/1426954/split-string-in-lua by user973713 on 11/26/15
 function CrossChatSplitString(inputstr, sep)
@@ -43,8 +42,19 @@ function tablelength(T)
   return count
 end
 
-function CrossChatOnUpdate(self, elapsed)
 
+function CrossChatOnUpdate(self, elapsed)
+showTho = false;
+if (ChatFrame3:IsShown() == false) then
+showTho = true;
+end
+if (GeneralDockManager.selected ~= ChatFrame3) then
+showTho = false;
+ChatFrame3.FontStringContainer:Hide();
+else
+ChatFrame3.FontStringContainer:Show();
+end
+if (showTho == true) then ChatFrame3Tab:SetText("CrossChat"); ChatFrame3:Show() end
 end--end function CrossChatOnUpdate
 
 
@@ -82,12 +92,25 @@ end--end function
 
 
 function CrossChatOutgoing(chatEntry, send)
+--http://wowprogramming.com/docs/widgets/EditBox
 
+if (chatEntry:GetText() == "" and ChatFrame3EditBox:HasFocus()) then
+--this part fires when the user first opens the editbox. it also fires when he hits enter too lol
+if (CROSSCHAT_getCurrentGuy() ~= "") then
+header = "Tell " .. CROSSCHAT_getCurrentGuy() .. ": ";--extra space matters
+if (
+	strlower(ChatFrame3EditBoxHeader:GetText()) ~= strlower(header)
+	) then
+ChatFrame3EditBoxHeader:SetText(header);
+end--end if
+else--else if currentGuy is ""
+ChatFrame3EditBox:SetText("/CrossChat Help")
+end--end currentGuy
+
+end
 if (send == 1 and chatEntry:GetName()=="ChatFrame3EditBox")
 then
-print("gettetxt,1,1 is ")
-print(string.sub(chatEntry:GetText(),1,1));
-print(chatEntry:GetText());
+--this part fires when a message is sent
 if (string.sub(chatEntry:GetText(),1,1) == "/"
 	or chatEntry:GetText() == nil
 	or chatEntry:GetText() == "") then
@@ -112,7 +135,6 @@ function CrossChatInit()
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",CROSSCHAT_onWhisperReceived);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM",CROSSCHAT_onWhisperSent);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",CROSSCHAT_CHAT_MSG_BN_WHISPER);
-ChatFrame3:Show();--my frame lol
 --ChatFrame3:SetScript("OnHyperlinkClick",CrossChatLinkClicked)--function(...) print("A hyperlink was clicked: ", ...) end)
 hooksecurefunc('ChatEdit_ParseText',CrossChatOutgoing);
 
