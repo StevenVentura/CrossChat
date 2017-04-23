@@ -94,20 +94,8 @@ end--end function
 function CrossChatOutgoing(chatEntry, send)
 --http://wowprogramming.com/docs/widgets/EditBox
 
-if (chatEntry:GetText() == "" and ChatFrame3EditBox:HasFocus()) then
---this part fires when the user first opens the editbox. it also fires when he hits enter too lol
-if (CROSSCHAT_getCurrentGuy() ~= "") then
-header = "Tell " .. CROSSCHAT_getCurrentGuy() .. ": ";--extra space matters
-if (
-	strlower(ChatFrame3EditBoxHeader:GetText()) ~= strlower(header)
-	) then
-ChatFrame3EditBoxHeader:SetText(header);
-end--end if
-else--else if currentGuy is ""
-ChatFrame3EditBox:SetText("/CrossChat Help")
-end--end currentGuy
 
-end
+
 if (send == 1 and chatEntry:GetName()=="ChatFrame3EditBox")
 then
 --this part fires when a message is sent
@@ -135,7 +123,8 @@ function CrossChatInit()
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER",CROSSCHAT_onWhisperReceived);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM",CROSSCHAT_onWhisperSent);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER",CROSSCHAT_CHAT_MSG_BN_WHISPER);
---ChatFrame3:SetScript("OnHyperlinkClick",CrossChatLinkClicked)--function(...) print("A hyperlink was clicked: ", ...) end)
+ChatFrame3:HookScript("OnHyperlinkClick",function(...) print("A hyperlink was clicked: ", ...) end)
+ChatFrame3:AddMessage(CROSSCHAT_COLOR .. "HELP LISTING options: either...\n    1) Target someone and type /cc.\nor 2) Type /cc and then someones name. Include the dash-server name. \n         |cffff0000example: |cffffee00/cc swifty-ragnaros");
 hooksecurefunc('ChatEdit_ParseText',CrossChatOutgoing);
 
 CROSSCHAT_scanFriendsList();

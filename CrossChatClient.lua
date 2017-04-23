@@ -22,6 +22,8 @@ CROSSCHAT_currentEnemyWhispering = "";
 
 
 function CROSSCHAT_CLIENT_SLASHCROSSCHAT(command)
+ChatFrame3Tab:Click();--change the window and focus lol
+
 if (strlower(command) == "help") then
 ChatFrame3:AddMessage(CROSSCHAT_COLOR .. "HELP LISTING options: either...\n    1) Target someone and type /cc.\nor 2) Type /cc and then someones name. Include the dash-server name. \n         |cffff0000example: |cffffee00/cc swifty-ragnaros");
 return;
@@ -144,7 +146,8 @@ ChatFrame3:AddMessage(CROSSCHAT_GREENONE .. "[" .. authorLink .. "] says: " .. m
 end--end function
 --things i say
 function CROSSCHAT_postMyOwnMessageInTab(message)
-ChatFrame3:AddMessage(CROSSCHAT_COLOR .. "<You>: " .. message);
+ChatFrame3:AddMessage(CROSSCHAT_COLOR .. "To [" 
+				.. CROSSCHAT_getCurrentGuy() .. "]: " ..  message);
 --TODO
 --send it to all the players for now i guess
 --cos i dont have a way to select players yet
