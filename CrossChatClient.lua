@@ -98,7 +98,7 @@ if (players[enemyName] == nil) then
 for index = 1, BNGetNumFriends() do
 --http://wowprogramming.com/docs/api/BNGetFriendInfo
 local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
-if (bnetNameWithNumber == "Jenn#1884") then--"StevenOldAcc#1866") then
+if (bnetNameWithNumber == "StevenOldAcc#1866") then--"Jenn#1884") then
 	players[enemyName] = {
 	playerName = enemyName,
 	hostID = presenceID
