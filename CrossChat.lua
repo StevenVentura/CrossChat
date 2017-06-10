@@ -43,7 +43,13 @@ function tablelength(T)
 end
 
 
+CrossChatDoOnlyOnce = 1;
 function CrossChatOnUpdate(self, elapsed)
+
+if (CrossChatDoOnlyOnce == 1) then
+CrossChatDoOnlyOnce = 0;
+CrossChatCreateOptions();
+end--end if once only startup code
 showTho = false;
 if (ChatFrame3:IsShown() == false) then
 showTho = true;
@@ -91,6 +97,7 @@ CROSSCHAT_ServerBNetMessageReceived(presenceID,string.sub(message,1+strlen(CROSS
 end--end function
 
 
+
 function CrossChatOutgoing(chatEntry, send)
 --http://wowprogramming.com/docs/widgets/EditBox
 
@@ -115,7 +122,15 @@ end
 
 end--end function CrossChatOutgoing
 
+function CrossChatCreateOptions() 
+CrossChatOptionsPanel = CreateFrame("Frame","CrossChatOptionsPanel",UIParent);
+CrossChatOptionsPanel.name = "CrossChat /cc";
 
+
+--add this options panel to the UI.
+InterfaceOptions_AddCategory(CrossChatOptionsPanel);
+InterfaceAddOnsList_Update();
+end--end function CrossChatCreateOptions
 
 --this is called after the variables are loaded
 function CrossChatInit()
