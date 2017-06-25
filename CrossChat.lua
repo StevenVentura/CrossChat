@@ -22,6 +22,7 @@ SlashCmdList["CROSSCHAT"] = slashCrossChat;
 
 function slashCrossChat(msg,editbox)
 command, rest = msg:match("^(%S*)%s*(.-)$");
+InterfaceOptionsFrame_OpenToCategory(CrossChatOptionsPanel);
 CROSSCHAT_CLIENT_SLASHCROSSCHAT(command);
 end--end function
 --local function taken from http://stackoverflow.com/questions/1426954/split-string-in-lua by user973713 on 11/26/15
@@ -122,9 +123,98 @@ end
 
 end--end function CrossChatOutgoing
 
+CrossChatOptionsListBoxes = {};
+
 function CrossChatCreateOptions() 
 CrossChatOptionsPanel = CreateFrame("Frame","CrossChatOptionsPanel",UIParent);
 CrossChatOptionsPanel.name = "CrossChat /cc";
+--http://wowprogramming.com/snippets/Simple_Scroll_Frame_35
+
+CrossChatScrollFrameTitle = CrossChatOptionsPanel:CreateFontString("CrossChatScrollFrameTitle",CrossChatOptionsPanel,"GameFontNormal");
+CrossChatScrollFrameTitle:SetTextColor(1,1,0,1);
+ CrossChatScrollFrameTitle:SetShadowColor(0,0,0,1);
+ CrossChatScrollFrameTitle:SetShadowOffset(2,-1);
+ CrossChatScrollFrameTitle:SetPoint("TOPLEFT",10,-10);
+ CrossChatScrollFrameTitle:SetText("Friends to add");
+ CrossChatScrollFrameTitle:Show();
+
+local frame = CreateFrame("Frame", "CrossChatScrollFrameParent", CrossChatOptionsPanel) 
+frame:SetSize(150, 200) 
+frame:SetPoint("TOPLEFT",CrossChatScrollFrameTitle,"BOTTOMLEFT",0,0);
+local texture = frame:CreateTexture() 
+texture:SetAllPoints() 
+texture:SetColorTexture(1,1,1,0.1) 
+frame.background = texture 
+local scrollframe = CreateFrame("ScrollFrame","CrossChatScrollFrame",CrossChatScrollFrameParent);
+scrollframe:SetPoint("CENTER",0,0);
+scrollframe:SetSize(150,200);
+scrollframe:Show();
+
+scrollbar = CreateFrame("Slider", CrossChatScrollBar, CrossChatScrollFrame, "UIPanelScrollBarTemplate") 
+scrollbar:SetPoint("TOPLEFT", frame, "TOPRIGHT", 4, -16) 
+scrollbar:SetPoint("BOTTOMLEFT", frame, "BOTTOMRIGHT", 4, 16) 
+scrollbar:SetMinMaxValues(1, 16*BNGetNumFriends()) 
+scrollbar:SetValueStep(1) 
+scrollbar.scrollStep = 1
+scrollbar:SetValue(0) 
+scrollbar:SetWidth(16) 
+scrollbar:SetScript("OnValueChanged", 
+function (self, value) 
+self:GetParent():SetVerticalScroll(value) 
+end) 
+local scrollbg = scrollbar:CreateTexture(nil, "BACKGROUND") 
+scrollbg:SetAllPoints(scrollbar) 
+scrollbg:SetColorTexture(0, 0, 0, 0.4) 
+
+local content = CreateFrame("Frame", CrossChatScrollFrameContent, CrossChatScrollFrame) 
+content:SetSize(128, 128) 
+local texture = content:CreateTexture() 
+texture:SetAllPoints() 
+--texture:SetTexture("Interface\\GLUES\\MainMenu\\Glues-BlizzardLogo") 
+texture:SetColorTexture(0,0,0,0);
+content.texture = texture 
+
+scrollframe:SetScrollChild(content)
+--end http://wowprogramming.com/snippets/Simple_Scroll_Frame_35
+
+
+
+local dummy = CreateFrame("CheckButton","CrossChatFriendSelectButton0",content,"OptionsCheckButtonTemplate");
+dummy:SetPoint("TOPLEFT",0,16);
+dummy:Hide();
+--check boxes are 26 by 26 pixels. the gap between them is ...
+
+
+for index = 1, BNGetNumFriends() do
+--http://wowprogramming.com/docs/api/BNGetFriendInfo
+local presenceID,glitchyAccountName,bnetNameWithNumber,isJustBNetFriend,characterName,uselessnumber,game = BNGetFriendInfo( index );
+CrossChatOptionsListBoxes[bnetNameWithNumber] = {};
+CrossChatOptionsListBoxes[bnetNameWithNumber].name = bnetNameWithNumber;
+local pls = CreateFrame("CheckButton","CrossChatFriendSelectButton" .. index,content,"OptionsCheckButtonTemplate");
+pls:SetPoint("TOPLEFT",_G["CrossChatFriendSelectButton" .. index-1],"BOTTOMLEFT",0,0);
+pls.name = bnetNameWithNumber;
+pls.setFunc = function(value) 
+CrossChatOptionsListBoxes.checked = (value == "1");
+end--end anonymous function
+--now make text labels
+local titleText = pls:CreateFontString("titleText",pls,"GameFontNormal");
+ titleText:SetTextColor(1,0.643,0.169,1);
+ titleText:SetShadowColor(0,0,0,1);
+ titleText:SetShadowOffset(2,-1);
+ titleText:SetPoint("LEFT",pls,"RIGHT",0,0);
+ titleText:SetText(bnetNameWithNumber);
+ titleText:Show();
+
+
+
+end--end for
+--[[for i=1,100 do
+local pls = CreateFrame("CheckButton","plstho" .. i,content,"OptionsCheckButtonTemplate");
+pls:SetPoint("TOPLEFT",_G["plstho" ..i-1],"BOTTOMLEFT",0,0);
+pls:Show();
+end--end for
+]]
+
 
 
 --add this options panel to the UI.
